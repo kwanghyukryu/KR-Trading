@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { apiRequest, getApiBaseUrl } from '../lib/api.js';
+import { apiRequest } from '../lib/api.js';
 
 const TOKEN_KEY = 'kr_admin_token';
 const ADMIN_KEY = 'kr_admin_email';
@@ -66,8 +66,11 @@ function AdminPage() {
   }
 
   async function handleSave(productId) {
-    const quantity = Number(draft[productId]);
-    if (!Number.isFinite(quantity) || quantity < 0) {
+    const draftKey = String(productId);
+    const rawQuantity = String(draft[draftKey] ?? '').trim();
+    const quantity = rawQuantity === '' ? Number.NaN : Number.parseInt(rawQuantity, 10);
+
+    if (!Number.isInteger(quantity) || quantity < 0) {
       setStatus({ type: 'error', message: 'Quantity must be a non-negative number.' });
       return;
     }
@@ -80,6 +83,7 @@ function AdminPage() {
         body: JSON.stringify({ quantity })
       });
       setInventory((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
+      setDraft((prev) => ({ ...prev, [draftKey]: String(updated.quantity) }));
       setStatus({ type: 'success', message: `Updated ${updated.name} quantity to ${updated.quantity}.` });
     } catch (error) {
       setStatus({ type: 'error', message: error.message });
@@ -103,7 +107,6 @@ function AdminPage() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-500">Admin Panel</p>
             <h1 className="font-display text-4xl">Inventory Management</h1>
-            <p className="mt-2 text-sm text-brand-700">API: {getApiBaseUrl()}</p>
           </div>
           <a href="/" className="rounded-md border border-brand-100 bg-white px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50">
             Back to Website
