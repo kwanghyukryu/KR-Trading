@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>KR Trading</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f4d71" />
+      <stop offset="100%" stop-color="#163a55" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)" />
+  <path d="M18 15h8v14l13-14h10L34.8 30.2 50 49H40.2L29 34.8 26 38v11h-8V15Z" fill="#f3f5f7" />
+  <path d="M50 49H39.5L31 36.5 36.3 31 50 49Z" fill="#be9557" fill-opacity=".95" />
+</svg>
