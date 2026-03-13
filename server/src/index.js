@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import inventoryRoutes from './routes/inventory.js';
+import { initializeDatabase } from './init-db.js';
 
 if (!process.env.JWT_SECRET) {
   throw new Error('Missing required environment variable: JWT_SECRET');
@@ -27,6 +28,14 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Internal server error.' });
 });
 
-app.listen(port, host, () => {
-  console.log(`API running on http://${host}:${port}`);
-});
+try {
+  await initializeDatabase();
+  console.log('Database initialization complete.');
+
+  app.listen(port, host, () => {
+    console.log(`API running on http://${host}:${port}`);
+  });
+} catch (error) {
+  console.error('Failed to initialize database.', error);
+  process.exit(1);
+}
